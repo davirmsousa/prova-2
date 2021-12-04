@@ -2,9 +2,11 @@ package questao2.produtos;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import questao2.observer.IObservadorDeCurso;
 import questao2.prototype.IPrototipavel;
 
 public class Curso extends Produto {
@@ -40,6 +42,7 @@ public class Curso extends Produto {
         }
     }
 
+    private Collection<IObservadorDeCurso> observadores;
     private Collection<Disciplina> disciplinas;
     private Collection<Livro> livros;
 
@@ -47,16 +50,18 @@ public class Curso extends Produto {
         super(codigo, nome);
         this.livros = new ArrayList<Livro>(livros);
         this.disciplinas = new ArrayList<Disciplina>(disciplinas);
+        this.observadores = new ArrayList<IObservadorDeCurso>();
     }
 
     public Curso(String codigo, String nome) {
-        super(codigo, nome);
+        this(codigo, nome, null, null);
     }
 
     public Curso(Curso produto) {
         super(produto);
         this.livros = new ArrayList<Livro>();
         this.disciplinas = new ArrayList<Disciplina>();
+        this.observadores = new ArrayList<IObservadorDeCurso>();
 
         for (Disciplina disciplina : produto.disciplinas) {
             this.addDisciplina(disciplina.clonar());
@@ -143,11 +148,34 @@ public class Curso extends Produto {
     }
 
     public Memento gerarMemento() {
-        return new Memento(this, this.codigo, this.nome, this.livros, this.disciplinas);
+        Memento memento = new Memento(this, this.codigo, this.nome, this.livros, this.disciplinas);
+        this.notificarAlteracaoNoCurso("[CHECKPOINT SALVO]");
+        return memento;
     }
 
     public void restaurar(Memento status) {
         status.restaurar();
+        this.notificarAlteracaoNoCurso("[CHECKPOINT RESTAURADO]");
+    }
+
+    public void inscreverObservador(IObservadorDeCurso observador) {
+        this.observadores.add(observador);
+    }
+
+    public void desinscreverObservador(IObservadorDeCurso observador) {
+        this.observadores.remove(observador);
+    }
+
+    public void notificarAlteracaoNoCurso(String evento) {
+        HashMap<String, Double> percentualPorDisciplina = new HashMap<String, Double>();
+
+        for (Disciplina disciplina : this.disciplinas) {
+            percentualPorDisciplina.put(disciplina.getCodigo(), disciplina.getPctCumprido());
+        }
+
+        for (IObservadorDeCurso observador : this.observadores) {
+            observador.notificarAlteracaoNoCurso(evento, percentualPorDisciplina);
+        }
     }
 
     public String gerarRelatorioSimplificado() {
