@@ -11,6 +11,10 @@ public abstract class CursoBaseBuilder<T> implements IBuilder<T> {
     protected String codigo;
 	protected String nome;
 
+	public CursoBaseBuilder() {
+		this.resetar();
+	}
+
 	@Override
 	public IBuilder<T> resetar() {
 		this.disciplinas = new ArrayList<Disciplina>();

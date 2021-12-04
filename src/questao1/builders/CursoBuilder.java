@@ -4,6 +4,10 @@ import questao1.produtos.Curso;
 
 public class CursoBuilder extends CursoBaseBuilder<Curso> {
 
+    private CursoBuilder() {
+        super();
+    }
+
     public static CursoBuilder obter() {
         return new CursoBuilder();
     }

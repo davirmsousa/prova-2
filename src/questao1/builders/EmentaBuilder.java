@@ -4,6 +4,10 @@ import questao1.produtos.Ementa;
 
 public class EmentaBuilder extends CursoBaseBuilder<Ementa> {
 
+    private EmentaBuilder() {
+        super();
+    }
+
     public static EmentaBuilder obter() {
         return new EmentaBuilder();
     }
