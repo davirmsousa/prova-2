@@ -1,10 +1,10 @@
-package produtos;
+package questao1.produtos;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-import prototype.IPrototipavel;
+import questao1.prototype.IPrototipavel;
 
 public class Curso extends Produto {
     private Collection<Disciplina> disciplinas;

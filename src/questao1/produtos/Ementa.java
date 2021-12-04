@@ -1,4 +1,4 @@
-package produtos;
+package questao1.produtos;
 
 import java.util.ArrayList;
 import java.util.Collection;

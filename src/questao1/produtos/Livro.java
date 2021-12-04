@@ -1,4 +1,4 @@
-package produtos;
+package questao1.produtos;
 
 public class Livro extends Produto {
     private double preco;

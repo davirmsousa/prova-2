@@ -1,8 +1,8 @@
-package fabricas;
+package questao1.fabricas;
 
 import java.util.HashMap;
-import produtos.Produto;
-import util.TipoProdutoEnum;
+import questao1.produtos.Produto;
+import questao1.util.TipoProdutoEnum;
 
 public abstract class ProdutoFactory {
     static HashMap<TipoProdutoEnum, ProdutoFactory> mapDeProduto;

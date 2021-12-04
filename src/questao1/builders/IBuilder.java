@@ -1,7 +1,7 @@
-package builders;
+package questao1.builders;
 
-import produtos.Disciplina;
-import produtos.Livro;
+import questao1.produtos.Disciplina;
+import questao1.produtos.Livro;
 
 public interface IBuilder<T> {
     IBuilder<T> resetar();

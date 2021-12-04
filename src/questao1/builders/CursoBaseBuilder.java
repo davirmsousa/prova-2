@@ -1,9 +1,9 @@
-package builders;
+package questao1.builders;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import produtos.Disciplina;
-import produtos.Livro;
+import questao1.produtos.Disciplina;
+import questao1.produtos.Livro;
 
 public abstract class CursoBaseBuilder<T> implements IBuilder<T> {
 	protected Collection<Disciplina> disciplinas;

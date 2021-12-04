@@ -1,6 +1,6 @@
-package builders;
+package questao1.builders;
 
-import produtos.Curso;
+import questao1.produtos.Curso;
 
 public class CursoBuilder extends CursoBaseBuilder<Curso> {
 

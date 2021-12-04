@@ -1,17 +1,17 @@
 package _testes;
 
-import builders.ADSDiretor;
-import builders.CursoBuilder;
-import builders.EmentaBuilder;
-import fabricas.DisciplinaFactory;
-import fabricas.ProdutoFactory;
-import produtos.Curso;
-import produtos.Disciplina;
-import produtos.Ementa;
-import produtos.Livro;
-import produtos.Produto;
-import prototype.RegistroDeCursos;
-import util.TipoProdutoEnum;
+import questao1.builders.ADSDiretor;
+import questao1.builders.CursoBuilder;
+import questao1.builders.EmentaBuilder;
+import questao1.fabricas.DisciplinaFactory;
+import questao1.fabricas.ProdutoFactory;
+import questao1.produtos.Curso;
+import questao1.produtos.Disciplina;
+import questao1.produtos.Ementa;
+import questao1.produtos.Livro;
+import questao1.produtos.Produto;
+import questao1.prototype.RegistroDeCursos;
+import questao1.util.TipoProdutoEnum;
 
 public class TestaProva1 implements ITeste {
 

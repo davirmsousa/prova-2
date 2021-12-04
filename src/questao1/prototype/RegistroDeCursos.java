@@ -1,8 +1,8 @@
-package prototype;
+package questao1.prototype;
 
 import java.util.HashMap;
 import java.util.Map;
-import produtos.Curso;
+import questao1.produtos.Curso;
 
 public class RegistroDeCursos {
     private static RegistroDeCursos instancia;

@@ -1,6 +1,6 @@
-package produtos;
+package questao1.produtos;
 
-import prototype.IPrototipavel;
+import questao1.prototype.IPrototipavel;
 
 public abstract class Produto implements IPrototipavel {
     protected String codigo;

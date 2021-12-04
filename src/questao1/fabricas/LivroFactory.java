@@ -1,7 +1,7 @@
-package fabricas;
+package questao1.fabricas;
 
-import produtos.Livro;
-import produtos.Produto;
+import questao1.produtos.Livro;
+import questao1.produtos.Produto;
 
 public class LivroFactory extends ProdutoFactory {
 

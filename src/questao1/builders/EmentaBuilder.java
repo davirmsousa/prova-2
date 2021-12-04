@@ -1,6 +1,6 @@
-package builders;
+package questao1.builders;
 
-import produtos.Ementa;
+import questao1.produtos.Ementa;
 
 public class EmentaBuilder extends CursoBaseBuilder<Ementa> {
 

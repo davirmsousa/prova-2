@@ -1,9 +1,9 @@
-package builders;
+package questao1.builders;
 
-import fabricas.ProdutoFactory;
-import produtos.Disciplina;
-import produtos.Livro;
-import util.TipoProdutoEnum;
+import questao1.fabricas.ProdutoFactory;
+import questao1.produtos.Disciplina;
+import questao1.produtos.Livro;
+import questao1.util.TipoProdutoEnum;
 
 public class ADSDiretor {
 
