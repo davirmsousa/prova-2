@@ -2,15 +2,15 @@ package _testes;
 
 import java.util.Stack;
 
-import questao2.builders.CursoBuilder;
-import questao2.fabricas.DisciplinaFactory;
-import questao2.observer.EmailNotificador;
-import questao2.observer.SMSNotificador;
-import questao2.produtos.Curso;
-import questao2.produtos.Disciplina;
-import questao2.produtos.Livro;
-import questao2.produtos.Curso.Memento;
-import questao2.util.TipoProdutoEnum;
+import questao3.builders.CursoBuilder;
+import questao3.fabricas.DisciplinaFactory;
+import questao3.observer.EmailNotificador;
+import questao3.observer.SMSNotificador;
+import questao3.produtos.Curso;
+import questao3.produtos.Disciplina;
+import questao3.produtos.Livro;
+import questao3.produtos.Curso.Memento;
+import questao3.util.TipoProdutoEnum;
 
 public class TestaProva2 implements ITeste {
 
