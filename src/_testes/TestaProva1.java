@@ -66,19 +66,10 @@ public class TestaProva1 implements ITeste {
         registro.registrar(curso);
 
         Curso curso2 = registro.obterPorNome(curso.getNome());
-        curso2.atualizarProgresso("INF001", 50);
+        curso2.avancar("INF001", 50);
 
-        System.out.println(this.relatorioDoCurso(curso));
-        System.out.println(this.relatorioDoCurso(curso2));
+        System.out.println(curso.gerarRelatorioSimplificado());
+        System.out.println(curso2.gerarRelatorioSimplificado());
     }
 
-    private String relatorioDoCurso(Curso curso) {
-        StringBuilder relatorio = new StringBuilder();
-
-        relatorio.append(curso + "\n");
-        relatorio.append("CHTOTAL: " + curso.getChTotal() + "\n");
-        relatorio.append("PROGRESSO: " + curso.getPctCumprido() + "\n");
-
-        return relatorio.toString();
-    }
 }

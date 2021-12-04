@@ -27,8 +27,13 @@ public class Disciplina extends Produto {
         return this.pctCumprido;
     }
 
-    public void setPctCumprido(double pctCumprido) {
+    private void setPctCumprido(double pctCumprido) {
         this.pctCumprido = pctCumprido;
+    }
+
+    public void avancar(double percentual) {
+        double pctResultante = this.pctCumprido + percentual;
+        this.setPctCumprido(pctResultante <= 100 ? pctResultante : 100);
     }
 
     public int getChTotal() {

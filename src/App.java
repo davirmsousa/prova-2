@@ -1,12 +1,12 @@
-import _testes.ITeste;
-import _testes.TestaProva1;
+import _testes.*;
 
 public class App {
 
     public void executar() {
         ITeste teste;
 
-        teste = new TestaProva1();
+        //teste = new TestaProva1();
+        teste = new TestaProva2();
 
         teste.executar();
     }

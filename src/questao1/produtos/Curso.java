@@ -3,10 +3,43 @@ package questao1.produtos;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import questao1.prototype.IPrototipavel;
 
 public class Curso extends Produto {
+
+    public class Memento {
+        private Collection<Disciplina> disciplinas;
+        private Collection<Livro> livros;
+        private String codigo;
+        private String nome;
+
+        private Curso curso;
+
+        private Memento(Curso curso, String codigo, String nome, Collection<Livro> livros, Collection<Disciplina> disciplinas) {
+            this.curso = curso;
+
+            this.disciplinas = (new ArrayList<Disciplina>(disciplinas)).stream()
+                .map(d -> d.clonar())
+                .collect(Collectors.toList());
+            
+            this.livros = (new ArrayList<Livro>(livros)).stream()
+                .map(l -> l.clonar())
+                .collect(Collectors.toList());
+            
+            this.codigo = codigo;
+            this.nome = nome;
+        }
+
+        private void restaurar() {
+            this.curso.disciplinas = this.disciplinas;
+            this.curso.livros = this.livros;
+            this.curso.codigo = this.codigo;
+            this.curso.nome = this.nome;
+        }
+    }
+
     private Collection<Disciplina> disciplinas;
     private Collection<Livro> livros;
 
@@ -86,11 +119,11 @@ public class Curso extends Produto {
         return horasCumpridas / chTotal * 100;
     }
 
-    public void atualizarProgresso(String codigoDisciplina, double pctCumprido) {
+    public void avancar(String codigoDisciplina, double percentual) {
         if (disciplinas != null && disciplinas.size() > 0) {
             for (Disciplina disciplina : disciplinas) {
                 if (disciplina.getCodigo().equalsIgnoreCase(codigoDisciplina)) {
-                    disciplina.setPctCumprido(pctCumprido);
+                    disciplina.avancar(percentual);
                     return;
                 }
             }
@@ -107,6 +140,38 @@ public class Curso extends Produto {
     @Override
     public String toString() {
         return "[Curso] [" + super.toString() + "]";
+    }
+
+    public Memento gerarMemento() {
+        return new Memento(this, this.codigo, this.nome, this.livros, this.disciplinas);
+    }
+
+    public void restaurar(Memento status) {
+        status.restaurar();
+    }
+
+    public String gerarRelatorioSimplificado() {
+        StringBuilder relatorio = new StringBuilder();
+
+        relatorio.append(this + "\n");
+        relatorio.append("CHTOTAL: " + this.getChTotal() + "\n");
+        relatorio.append("PROGRESSO: " + this.getPctCumprido() + "\n");
+
+        return relatorio.toString();
+    }
+
+    public String gerarRelatorioCompleto() {
+        StringBuilder relatorio = new StringBuilder();
+
+        relatorio.append(this + "\n");
+
+        for (Disciplina disciplina : this.disciplinas) {
+            relatorio.append(disciplina.getCodigo() + "\n\tCHTOTAL: " +
+                disciplina.getChTotal() + "\n\tPROGRESSO: " +
+                disciplina.getPctCumprido() + "\n");
+        }
+
+        return relatorio.toString();
     }
 
 }
