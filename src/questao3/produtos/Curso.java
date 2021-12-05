@@ -3,51 +3,24 @@ package questao3.produtos;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
+import questao3.memento.ICursoMemento;
 import questao3.observer.IObservadorDeCurso;
 import questao3.prototype.IPrototipavel;
+import questao3.states.EstadoDoCursoAbstrato;
+import questao3.states.EstadoEmAndamento;
 
 public class Curso extends Produto {
-
-    public class Memento {
-        private Collection<Disciplina> disciplinas;
-        private Collection<Livro> livros;
-        private String codigo;
-        private String nome;
-
-        private Curso curso;
-
-        private Memento(Curso curso, String codigo, String nome, Collection<Livro> livros, Collection<Disciplina> disciplinas) {
-            this.curso = curso;
-
-            this.disciplinas = (new ArrayList<Disciplina>(disciplinas)).stream()
-                .map(d -> d.clonar())
-                .collect(Collectors.toList());
-            
-            this.livros = (new ArrayList<Livro>(livros)).stream()
-                .map(l -> l.clonar())
-                .collect(Collectors.toList());
-            
-            this.codigo = codigo;
-            this.nome = nome;
-        }
-
-        private void restaurar() {
-            this.curso.disciplinas = this.disciplinas;
-            this.curso.livros = this.livros;
-            this.curso.codigo = this.codigo;
-            this.curso.nome = this.nome;
-        }
-    }
 
     private Collection<IObservadorDeCurso> observadores;
     private Collection<Disciplina> disciplinas;
     private Collection<Livro> livros;
+    
+    private EstadoDoCursoAbstrato estado;
 
     public Curso(String codigo, String nome, Collection<Disciplina> disciplinas, Collection<Livro> livros) {
         super(codigo, nome);
+        this.estado = new EstadoEmAndamento(this);
         this.livros = new ArrayList<Livro>(livros);
         this.disciplinas = new ArrayList<Disciplina>(disciplinas);
         this.observadores = new ArrayList<IObservadorDeCurso>();
@@ -62,7 +35,7 @@ public class Curso extends Produto {
         this.livros = new ArrayList<Livro>();
         this.disciplinas = new ArrayList<Disciplina>();
         this.observadores = new ArrayList<IObservadorDeCurso>();
-
+        
         for (Disciplina disciplina : produto.disciplinas) {
             this.addDisciplina(disciplina.clonar());
         }
@@ -72,26 +45,42 @@ public class Curso extends Produto {
         }
     }
 
+    public void setDisciplinas(Collection<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
+    }
+
     public void addDisciplina(Disciplina disciplina) {
         this.disciplinas.add(disciplina);
+    }
+
+    public Collection<Disciplina> obterDisciplinas() {
+        return this.disciplinas;
+    }
+
+    public void setLivros(Collection<Livro> livros) {
+        this.livros = livros;
     }
 
     public void addLivro(Livro livro) {
         this.livros.add(livro);
     }
 
+    public Collection<Livro> obterLivros() {
+        return this.livros;
+    }
+
     @Override
     public double getPreco() {
         double precoDoCurso = 0;
         
-        if (livros != null && livros.size() > 0) {
-            for (Livro livro : livros) {
+        if (this.livros != null && this.livros.size() > 0) {
+            for (Livro livro : this.livros) {
                 precoDoCurso += livro.getPreco();
             }
         }
         
-        if (disciplinas != null && disciplinas.size() > 0) {
-            for (Disciplina disciplina : disciplinas) {
+        if (this.disciplinas != null && this.disciplinas.size() > 0) {
+            for (Disciplina disciplina : this.disciplinas) {
                 precoDoCurso += disciplina.getPreco();
             }
         }
@@ -102,8 +91,8 @@ public class Curso extends Produto {
     public int getChTotal() {
         int chTotal = 0;
 
-        if (disciplinas != null && disciplinas.size() > 0) {
-            for (Disciplina disciplina : disciplinas) {
+        if (this.disciplinas != null && this.disciplinas.size() > 0) {
+            for (Disciplina disciplina : this.disciplinas) {
                 chTotal += disciplina.getChTotal();
             }
         }
@@ -115,8 +104,8 @@ public class Curso extends Produto {
         int chTotal = this.getChTotal();
         double horasCumpridas = 0;
 
-        if (disciplinas != null && disciplinas.size() > 0) {
-            for (Disciplina disciplina : disciplinas) {
+        if (this.disciplinas != null && this.disciplinas.size() > 0) {
+            for (Disciplina disciplina : this.disciplinas) {
                 horasCumpridas += (disciplina.getPctCumprido() * disciplina.getChTotal()) / 100;
             }
         } 
@@ -125,16 +114,7 @@ public class Curso extends Produto {
     }
 
     public void avancar(String codigoDisciplina, double percentual) {
-        if (disciplinas != null && disciplinas.size() > 0) {
-            for (Disciplina disciplina : disciplinas) {
-                if (disciplina.getCodigo().equalsIgnoreCase(codigoDisciplina)) {
-                    disciplina.avancar(percentual);
-                    return;
-                }
-            }
-        }
-
-        throw new NoSuchElementException(codigoDisciplina);
+        estado.avancar(codigoDisciplina, percentual);
     }
     
     @Override
@@ -142,20 +122,12 @@ public class Curso extends Produto {
         return new Curso(this);
     }
 
-    @Override
-    public String toString() {
-        return "[Curso] [" + super.toString() + "]";
+    public ICursoMemento gerarMemento() {
+        return this.estado.gerarMemento();
     }
 
-    public Memento gerarMemento() {
-        Memento memento = new Memento(this, this.codigo, this.nome, this.livros, this.disciplinas);
-        this.notificarAlteracaoNoCurso("[CHECKPOINT SALVO]");
-        return memento;
-    }
-
-    public void restaurar(Memento status) {
-        status.restaurar();
-        this.notificarAlteracaoNoCurso("[CHECKPOINT RESTAURADO]");
+    public void restaurar(ICursoMemento status) {
+        this.estado.restaurar(status);
     }
 
     public void inscreverObservador(IObservadorDeCurso observador) {
@@ -178,6 +150,34 @@ public class Curso extends Produto {
         }
     }
 
+    public void setEstado(EstadoDoCursoAbstrato estado) {
+        this.estado = estado;
+    }
+
+    public EstadoDoCursoAbstrato obterEstado() {
+        return this.estado;
+    }
+
+    public void retomar() {
+        this.estado.retomar();
+    }
+
+    public void suspender() {
+        this.estado.suspender();
+    }
+
+    public void cancelar() {
+        this.estado.cancelar();
+    }
+
+    public void concluir() {
+        this.estado.concluir();
+    }
+
+    public String gerarCertificado() {
+        return this.estado.gerarCertificado();
+    }
+
     public String gerarRelatorioSimplificado() {
         StringBuilder relatorio = new StringBuilder();
 
@@ -194,12 +194,17 @@ public class Curso extends Produto {
         relatorio.append(this + "\n");
 
         for (Disciplina disciplina : this.disciplinas) {
-            relatorio.append(disciplina.getCodigo() + "\n\tCHTOTAL: " +
-                disciplina.getChTotal() + "\n\tPROGRESSO: " +
+            relatorio.append(disciplina.getCodigo() + "\tCHTOTAL: " +
+                disciplina.getChTotal() + "\tPROGRESSO: " +
                 disciplina.getPctCumprido() + "\n");
         }
 
         return relatorio.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "[Curso " + this.estado + "] [" + super.toString() + "]";
     }
 
 }
