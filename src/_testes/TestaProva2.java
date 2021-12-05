@@ -60,21 +60,24 @@ public class TestaProva2 implements ITeste {
         curso.avancar("DFM001", 40);
         historico.push(curso.gerarMemento());
 
+        curso.avancar("DFM001", 10);
+        System.out.println("\n" + curso.gerarRelatorioCompleto() + "\n");
+
         curso.inscreverObservador(new SMSNotificador());
         curso.restaurar(historico.pop());
     }
 
     private void testaAlteracaoDeStatus() {
-        System.out.println("testaEstadoEmAndamento~~~~~~~~~~~~~~~~~~");
+        System.out.println("~~~~~~~~~~~~~~~~~~testaEstadoEmAndamento~~~~~~~~~~~~~~~~~~\n");
         this.testaEstadoEmAndamento();
 
-        System.out.println("testaEstadoCancelado~~~~~~~~~~~~~~~~~~");
+        System.out.println("~~~~~~~~~~~~~~~~~~testaEstadoCancelado~~~~~~~~~~~~~~~~~~\n");
         this.testaEstadoCancelado();
 
-        System.out.println("testaEstadoConcluido~~~~~~~~~~~~~~~~~~");
+        System.out.println("~~~~~~~~~~~~~~~~~~testaEstadoConcluido~~~~~~~~~~~~~~~~~~\n");
         this.testaEstadoConcluido();
 
-        System.out.println("testaEstadoSuspenso~~~~~~~~~~~~~~~~~~");
+        System.out.println("~~~~~~~~~~~~~~~~~~testaEstadoSuspenso~~~~~~~~~~~~~~~~~~\n");
         this.testaEstadoSuspenso();
     }
 
@@ -110,19 +113,111 @@ public class TestaProva2 implements ITeste {
 
         curso = this.construirCurso();
         curso.suspender();
-        System.out.println(curso.toString() + curso.obterEstado());
+        System.out.println(curso.toString());
     }
 
     private void testaEstadoConcluido() {
+        Curso curso = this.construirCurso();
+        ICursoMemento mementoEmAndamento = curso.gerarMemento();
 
+        curso.avancar("DFM001", 100);
+        curso.avancar("DAF001", 100);
+        curso.concluir();
+        System.out.println("- -- - -- - -- - --\n" + curso.gerarRelatorioCompleto());
+
+        ICursoMemento memento = curso.gerarMemento();
+        System.out.println("- -- - -- - -- - --\n" + memento);
+
+        curso.avancar("DAF001", 25);
+        System.out.println("- -- - -- - -- - --\n" + curso.gerarRelatorioCompleto());
+
+        curso.restaurar(mementoEmAndamento);
+        System.out.println("- -- - -- - -- - --\n" + curso.gerarRelatorioCompleto());
+
+        System.out.println("- -- - -- - -- - --CERTIFICADO\n" + curso.gerarCertificado() + "\n");
+
+        curso.concluir();
+        System.out.println(curso);
+
+        curso.retomar();
+        System.out.println(curso);
+
+        curso.cancelar();
+        System.out.println(curso);
+
+        curso.suspender();
+        System.out.println(curso.toString());
     }
 
     private void testaEstadoSuspenso() {
+        Stack<ICursoMemento> historico = new Stack<ICursoMemento>();
 
+        Curso curso = this.construirCurso();
+        curso.avancar("DFM001", 70);
+
+        historico.push(curso.gerarMemento());
+
+        curso.suspender();
+        System.out.println("- -- - -- - -- - --\n" + curso.gerarRelatorioCompleto());
+
+        ICursoMemento memento = curso.gerarMemento();
+        System.out.println("- -- - -- - -- - --\n" + memento);
+        historico.push(memento);
+
+        curso.avancar("DAF001", 25);
+        System.out.println("- -- - -- - -- - --\n" + curso.gerarRelatorioCompleto());
+
+        curso.restaurar(historico.pop());
+        System.out.println("- -- - -- - -- - --\n" + curso.gerarRelatorioCompleto());
+
+        System.out.println("- -- - -- - -- - --CERTIFICADO\n" + curso.gerarCertificado() + "\n");
+
+        curso.concluir();
+        System.out.println(curso);
+
+        curso.suspender();
+        System.out.println(curso);
+
+        curso.cancelar();
+        System.out.println(curso);
+
+        curso = this.construirCurso();
+        curso.suspender();
+        curso.retomar();
+        System.out.println(curso.toString());
     }
 
     private void testaEstadoCancelado() {
+        Curso curso = this.construirCurso();
+        curso.avancar("DAF001", 15);
+        ICursoMemento mementoEmAndamento = curso.gerarMemento();
 
+        curso.suspender();
+        curso.cancelar();
+        System.out.println("- -- - -- - -- - --\n" + curso.gerarRelatorioCompleto());
+
+        ICursoMemento memento = curso.gerarMemento();
+        System.out.println("- -- - -- - -- - --\n" + memento);
+
+        curso.avancar("DAF001", 25);
+        System.out.println("- -- - -- - -- - --\n" + curso.gerarRelatorioCompleto());
+
+        curso.restaurar(mementoEmAndamento);
+        System.out.println("- -- - -- - -- - --\n" + curso.gerarRelatorioCompleto());
+
+        System.out.println("- -- - -- - -- - --CERTIFICADO\n" + curso.gerarCertificado() + "\n");
+
+        curso.concluir();
+        System.out.println(curso);
+
+        curso.retomar();
+        System.out.println(curso);
+
+        curso.cancelar();
+        System.out.println(curso);
+
+        curso.suspender();
+        System.out.println(curso.toString());
     }
 
     private Curso construirCurso() {
